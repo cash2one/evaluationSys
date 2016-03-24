@@ -10,7 +10,7 @@ import datetime
 import commands
 
 from conf.common import *
-from sqlexecutor import SqlExecutor
+from dao.sqlexecutor import SqlExecutor
 from strategyManager import StrategyManager
 
 reload(sys)

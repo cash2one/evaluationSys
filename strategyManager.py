@@ -10,7 +10,7 @@ import datetime
 import commands
 
 from conf.common import *
-from sqlexecutor import SqlExecutor
+from dao.sqlexecutor import SqlExecutor
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -32,7 +32,7 @@ class StrategyManager(object):
         argp.add_argument('-av', '-action', '-action_verison', dest='action_verison')
     
         args = argp.parse_args()
-       
+        print args 
         try:
             self.do(args)
         except Exception as e:
@@ -45,13 +45,13 @@ class StrategyManager(object):
     def do(self, args):
         try:
             if args.method == 'add':
-                versionName = args.version_name if hasattr(args, 'version_name') else ''
-                versionDesc = args.version_desc if hasattr(args, 'version_desc') else ''
-                gitBranch = args.git_branch if hasattr(args, 'git_branch') else 'master'
-                gitCommitId = args.git_commit_id if hasattr(args, 'git_commit_id') else ''
-                featureVersion = args.feature_verison if hasattr(args, 'feature_verison') else 0 
-                sampleVersion = args.sample_verison if hasattr(args, 'sample_verison') else 0 
-                actionVersion = args.action_verison if hasattr(args, 'action_verison') else 0 
+                versionName = args.version_name if args.version_name else ''
+                versionDesc = args.version_desc if args.version_desc else ''
+                gitBranch = args.git_branch if args.git_branch else 'master'
+                gitCommitId = args.git_commit_id if args.git_commit_id else ''
+                featureVersion = args.feature_verison if args.feature_verison else 0 
+                sampleVersion = args.sample_verison if args.sample_verison else 0 
+                actionVersion = args.action_verison if args.action_verison else 0 
                 
                 self.add(versionName, versionDesc, gitBranch, gitCommitId, featureVersion, sampleVersion, actionVersion)
             elif args.method == 'list':

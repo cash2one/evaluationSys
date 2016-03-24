@@ -9,11 +9,3 @@ MYSQL = {
 #    'autocommit': True,
 }
 
-#MYSQL = {
-#    'host': '10.208.6.182',
-#    'port': 6019,
-#    'user': 'fang_r',
-#    'passwd': 'XrAtKdcMKQmdGeVo',
-#    'db': 'fang',
-##    'autocommit': True,
-#}

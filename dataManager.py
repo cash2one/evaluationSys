@@ -9,13 +9,8 @@ import time
 import datetime
 import commands
 
-#from featureDataManager import FeatureDataManager
 from conf.common import *
-from sqlexecutor import SqlExecutor
-
-reload(sys)
-sys.setdefaultencoding('utf8')
-
+from dao.sqlexecutor import SqlExecutor
 
 CURRENT_PATH = os.path.dirname(os.path.realpath(__file__))
 
@@ -28,22 +23,11 @@ class DataManager(object):
         argp.add_argument('-f', '-file', dest='file')
         argp.add_argument('-v', '-version', '-data_version', dest='data_version')
         args = argp.parse_args()
-        print args
 
         try:
             self.do(args)
-            #if args.data_type == 'feature':
-            #    featureDataManager = FeatureDataManager()
-            #    featureDataManager.do(args)
-            #if args.data_type == 'sample':
-            #    pass
-            #if args.data_type == 'action':
-            #    pass
-    
         except Exception as e:
             print e
-        else:
-            pass
         finally:
             pass
 
@@ -114,12 +98,11 @@ class DataManager(object):
     def persistFile(self, srcFile, destFile):
         try:
             if srcFile[0] != '/':
-                srcFile = CFG['src_data_path'] + srcFile 
-            srcFile = CFG['src_data_host'] + ':' + srcFile
-            destFile = CFG['dest_data_host'] + ':' + CFG['dest_data_path'] + destFile
-            scpCmd = 'scp {0} {1}'.format(srcFile, destFile)
-            print scpCmd
-            cmdStatus, cmdOutput = commands.getstatusoutput(scpCmd)
+                srcFile = TMP_DATA_PATH + srcFile 
+            destFile = WAREHOUSE_DATA_PATH + destFile
+            cmd = 'mv {0} {1}'.format(srcFile, destFile)
+            print cmd
+            cmdStatus, cmdOutput = commands.getstatusoutput(cmd)
             if (cmdStatus != 0):
                 raise Exception('copy file error')
         except Exception as e:
@@ -128,13 +111,11 @@ class DataManager(object):
 
     def getPersistedFile(self, destFile):
         try:
-            localFile = CFG['src_data_path'] + destFile
-            if destFile[0] != '/':
-                destFile = CFG['dest_data_path'] + destFile 
-            destFile = CFG['dest_data_host'] + ':' + destFile
-            scpCmd = 'scp {0} {1}'.format(destFile, localFile)
-            #print scpCmd
-            cmdStatus, cmdOutput = commands.getstatusoutput(scpCmd)
+            localFile = TMP_DATA_PATH + destFile
+            destFile = WAREHOUSE_DATA_PATH + destFile
+            cmd = 'mv {0} {1}'.format(destFile, localFile)
+            print cmd
+            cmdStatus, cmdOutput = commands.getstatusoutput(cmd)
             if (cmdStatus != 0):
                 raise Exception('copy file error')
             return localFile

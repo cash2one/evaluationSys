@@ -14,38 +14,11 @@
 # *  
 # **/
 
+import os
+import sys
 import MySQLdb
-
-#class SqlExecutor(object):
-#    def __init__(self, dbCfg):
-#        self.conn = MySQLdb.connect(host=dbCfg['host'], user=dbCfg['user'], passwd=dbCfg['passwd'], port=dbCfg['port'], db=dbCfg['db'])
-#        self.cursor = self.conn.cursor()
-#
-#
-#    def select(self, sql):
-#        ret = []
-#        try:
-#            self.cursor.execute(sql)
-#            results = self.cursor.fetchall()
-#            for row in results:
-#                ret.append(row)
-#        except Exception as e:
-#            print e
-#            return False
-#        return ret
-#
-#    def insert(self, sql):
-#        try:
-#            ret = self.cursor.execute(sql)
-#            self.conn.commit()
-#            return ret
-#        except Exception as e:
-#            self.conn.rollback()
-#            print e
-#            return False
-
 import threading
-from conf.common import CFG
+from conf.db import MYSQL 
 
 class SqlExecutor(object):
     instance = None
@@ -55,7 +28,7 @@ class SqlExecutor(object):
         self.cursor = self.conn.cursor(cursorclass = MySQLdb.cursors.DictCursor)
 
     @staticmethod
-    def getInstance(dbCfg=CFG['db']):
+    def getInstance(dbCfg=MYSQL):
         if (SqlExecutor.instance == None):
             SqlExecutor.mutex.acquire()
             if (SqlExecutor.instance == None):
