@@ -10,7 +10,7 @@ import datetime
 import commands
 
 from conf.common import *
-from sqlexecutor import SqlExecutor
+from dao.sqlexecutor import SqlExecutor
 from strategyManager import StrategyManager
 from dataManager import DataManager
 
@@ -32,6 +32,7 @@ JOB_STATUS = {
 class JobWorker(object):
    
     jobInfo = None
+    jobDir = None
     strategySrc = None 
     strategyFeature = None 
     strategySample = None 
@@ -71,11 +72,16 @@ class JobWorker(object):
             if not strategyInfo:
                 print 'strategyVersion invalid:', strategyVersion
                 return
+            
+            self.jobDir = TMP_DATA_PATH + str(jobId)
+            if self.jobDir and not os.path.exists(self.jobDir):
+                os.makedirs(self.jobDir)
 
             self.strategySrc = self.getStragetySrc(strategyInfo)
             self.strategyFeature = self.getFeatureData(strategyInfo)
             self.strategySample = self.getSampleData(strategyInfo)
             self.strategyAction = self.getActionData(strategyInfo)
+
 
             #self.strategyMergedData = self.getStrategyMergedData()
         except Exception as e:
@@ -87,6 +93,13 @@ class JobWorker(object):
 
     def afterExecute(self, jobId):
         pass
+
+    def moveData(self, srcData, destData):
+        cmd = 'mv {0} {1}'.format(srcData, destData)
+        print cmd
+        cmdStatus, cmdOutput = commands.getstatusoutput(cmd)
+        if (cmdStatus != 0):
+            raise Exception('moveData failed')
 
     def getStragetySrc(self, strategyInfo):
         pass
@@ -101,6 +114,7 @@ class JobWorker(object):
         dataManager = DataManager()
         data = dataManager.get('feature', strategyInfo['feature_version'])
         print data 
+        self.moveData(data, self.jobDir)
         return data 
 
 
@@ -114,6 +128,7 @@ class JobWorker(object):
         dataManager = DataManager()
         data = dataManager.get('sample', strategyInfo['sample_version'])
         print data 
+        self.moveData(data, self.jobDir)
         return data 
 
     def getActionData(self, strategyInfo):
@@ -126,6 +141,7 @@ class JobWorker(object):
         dataManager = DataManager()
         data = dataManager.get('action', strategyInfo['action_version'])
         print data 
+        self.moveData(data, self.jobDir)
         return data 
 
     def schedule(self):

@@ -64,6 +64,9 @@ class DataManager(object):
             #2. add version info
             self.addNewVersion(intDataType, destFile, versionCode, versionName, versionDesc)
             print 'add new version success! version code =', versionCode
+
+            self.deleteTmpFile(srcFile)
+
         except Exception as e:
             print e
 
@@ -108,6 +111,13 @@ class DataManager(object):
         except Exception as e:
             print e
             raise Exception('persist file error')
+
+    def deleteTmpFile(self, srcFile):
+        if srcFile[0] != '/':
+            srcFile = TMP_DATA_PATH + srcFile 
+        cmd = 'rm -f {0}'.format(srcFile)
+        print cmd
+        cmdStatus, cmdOutput = commands.getstatusoutput(cmd)
 
     def getPersistedFile(self, destFile):
         try:
