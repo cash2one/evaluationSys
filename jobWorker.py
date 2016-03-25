@@ -20,15 +20,6 @@ sys.setdefaultencoding('utf8')
 
 CURRENT_PATH = os.path.dirname(os.path.realpath(__file__))
 
-JOB_STATUS = {
-        'UNSCHEDULED'   :   10,
-        'SCHEDULED'     :   20,
-        'PREPARING'     :   30,
-        'PREPARED'      :   40,
-        'COMPUTING'     :   50,
-        'DONE'          :   100,
-}
-
 class JobWorker(object):
    
     jobInfo = None

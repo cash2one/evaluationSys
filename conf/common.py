@@ -14,3 +14,11 @@ DATA_TYPE = {
 }
 
 
+JOB_STATUS = {
+        'UNSCHEDULED'   :   10,
+        'SCHEDULED'     :   20,
+        'PREPARING'     :   30,
+        'PREPARED'      :   40,
+        'COMPUTING'     :   50,
+        'DONE'          :   100,
+}

@@ -111,7 +111,7 @@ class JobManager(object):
         try:
             sqlExecutor = SqlExecutor.getInstance()
             curTime = int(time.time())
-            sql = 'insert into jobpool(strategy_version, ctime, mtime) values({0}, {1}, {2})'.format(strategyVersion, curTime, curTime)
+            sql = 'insert into jobpool(strategy_version, ctime, mtime, job_status) values({0}, {1}, {2}, {3})'.format(strategyVersion, curTime, curTime, JOB_STATUS['UNSCHEDULED'])
             #print sql
             ret = sqlExecutor.insert(sql)
             lastId = sqlExecutor.getLastRowId()

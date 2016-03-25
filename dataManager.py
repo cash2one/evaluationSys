@@ -125,7 +125,7 @@ class DataManager(object):
         try:
             localFile = TMP_DATA_PATH + destFile
             destFile = WAREHOUSE_DATA_PATH + destFile
-            cmd = 'mv {0} {1}'.format(destFile, localFile)
+            cmd = 'cp -f {0} {1}'.format(destFile, localFile)
             print cmd
             cmdStatus, cmdOutput = commands.getstatusoutput(cmd)
             if (cmdStatus != 0):
