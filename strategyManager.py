@@ -61,6 +61,13 @@ class StrategyManager(object):
 
     #添加新版本
     def add(self, versionName, versionDesc, gitBranch, gitCommitId, featureVersion, sampleVersion, actionVersion):
+        if not sampleVersion:
+            print 'sampleVersion is not set'
+            return
+        if not actionVersion:
+            print 'actionVersion is not set'
+            return
+
         versionCode = datetime.datetime.now().strftime('%Y%m%d%H%M')
         try:
             #add version info

@@ -22,6 +22,8 @@ class DataManager(object):
         argp.add_argument('-m', '-method', dest='method', choices=['add', 'list', 'get'])
         argp.add_argument('-f', '-file', dest='file')
         argp.add_argument('-v', '-version', '-data_version', dest='data_version')
+        argp.add_argument('-name', dest='version_name')
+        argp.add_argument('-desc', dest='version_desc')
         args = argp.parse_args()
 
         try:
@@ -35,16 +37,16 @@ class DataManager(object):
         try:
             if args.method == 'add':
                 strDataType = args.data_type
-                versionName = args.version_name if hasattr(args, 'version_name') else ''
-                versionDesc = args.version_desc if hasattr(args, 'version_desc') else ''
-                srcFile = args.file if hasattr(args, 'file') else ''
+                versionName = args.version_name if args.version_name else ''
+                versionDesc = args.version_desc if args.version_desc else ''
+                srcFile = args.file if args.file else ''
                 self.add(strDataType, versionName, versionDesc, srcFile)
             elif args.method == 'list':
                 strDataType = args.data_type
                 self.list(strDataType)
             elif args.method == 'get':
                 strDataType = args.data_type
-                versionCode = args.data_version if hasattr(args, 'data_version') else ''
+                versionCode = args.data_version if args.data_version else ''
                 self.get(strDataType, versionCode)
         except Exception as e:
             print e

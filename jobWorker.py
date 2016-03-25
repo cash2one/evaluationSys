@@ -39,13 +39,6 @@ class JobWorker(object):
     strategyAction = None 
 
     def run(self):
-        #argp = ArgumentParser()
-        #argp.add_argument('-m', '-method', dest='method', choices=['add', 'list', 'check'])
-        #argp.add_argument('-v', '-vesion', '-strategy_version', dest='strategy_version')
-        #argp.add_argument('-i', '-id', '-job_id', dest='job_id')
-    
-        #args = argp.parse_args()
-       
         try:
             #1. 调度一个job
             self.jobInfo = self.schedule()
@@ -72,13 +65,11 @@ class JobWorker(object):
             if not strategyInfo:
                 print 'strategyVersion invalid:', strategyVersion
                 return
-            
-            self.jobDir = TMP_DATA_PATH + str(jobId)
-            if self.jobDir and not os.path.exists(self.jobDir):
-                os.makedirs(self.jobDir)
+        
+            self.jobDir = self.makeJobDir(jobId)
 
             self.strategySrc = self.getStragetySrc(strategyInfo)
-            self.strategyFeature = self.getFeatureData(strategyInfo)
+            #self.strategyFeature = self.getFeatureData(strategyInfo)
             self.strategySample = self.getSampleData(strategyInfo)
             self.strategyAction = self.getActionData(strategyInfo)
 
@@ -94,6 +85,14 @@ class JobWorker(object):
     def afterExecute(self, jobId):
         pass
 
+    def makeJobDir(self, jobId):
+        jobDir = TMP_DATA_PATH + str(jobId)
+        if os.path.exists(jobDir):
+            os.popen('rm -rf {0}'.format(jobDir))
+        if not os.path.exists(jobDir):
+            os.makedirs(jobDir)
+        return jobDir
+
     def moveData(self, srcData, destData):
         cmd = 'mv {0} {1}'.format(srcData, destData)
         print cmd
@@ -105,12 +104,6 @@ class JobWorker(object):
         pass
 
     def getFeatureData(self, strategyInfo):
-        #cmd = 'python dataManager.py feature -m get -v {0}'.format(strategyInfo['feature_version'])
-        #print cmd
-        #cmdStatus, cmdOutput = commands.getstatusoutput(cmd)
-        #print 'getFeatureData result:' , cmdOutput
-        #if (cmdStatus != 0):
-        #    raise Exception('getFeatureData error')
         dataManager = DataManager()
         data = dataManager.get('feature', strategyInfo['feature_version'])
         print data 
@@ -119,12 +112,6 @@ class JobWorker(object):
 
 
     def getSampleData(self, strategyInfo):
-        #cmd = 'python dataManager.py sample -m get -v {0}'.format(strategyInfo['sample_version'])
-        #print cmd
-        #cmdStatus, cmdOutput = commands.getstatusoutput(cmd)
-        #print 'getSampleData result:' , cmdOutput
-        #if (cmdStatus != 0):
-        #    raise Exception('getSampleData error')
         dataManager = DataManager()
         data = dataManager.get('sample', strategyInfo['sample_version'])
         print data 
@@ -132,12 +119,6 @@ class JobWorker(object):
         return data 
 
     def getActionData(self, strategyInfo):
-        #cmd = 'python dataManager.py action -m get -v {0}'.format(strategyInfo['action_version'])
-        #print cmd
-        #cmdStatus, cmdOutput = commands.getstatusoutput(cmd)
-        #print 'getActionData result:' , cmdOutput
-        #if (cmdStatus != 0):
-        #    raise Exception('getActionData error')
         dataManager = DataManager()
         data = dataManager.get('action', strategyInfo['action_version'])
         print data 

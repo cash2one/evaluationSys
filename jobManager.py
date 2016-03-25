@@ -41,7 +41,7 @@ class JobManager(object):
     def do(self, args):
         try:
             if args.method == 'add':
-                strategyVersion = args.strategy_version if hasattr(args, 'strategy_version') else ''
+                strategyVersion = args.strategy_version if args.strategy_version else 0
                 self.add(strategyVersion)
             elif args.method == 'list':
                 self.list()
@@ -54,7 +54,7 @@ class JobManager(object):
 
     #添加新job
     def add(self, strategyVersion):
-        if strategyVersion == None or strategyVersion == '':
+        if not strategyVersion:
             raise Exception('no strategyVersion is set')
   
         try:
