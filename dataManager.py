@@ -123,6 +123,7 @@ class DataManager(object):
 
     def getPersistedFile(self, destFile):
         try:
+            tmp = destFile
             localFile = TMP_DATA_PATH + destFile
             destFile = WAREHOUSE_DATA_PATH + destFile
             cmd = 'cp -f {0} {1}'.format(destFile, localFile)
@@ -130,7 +131,7 @@ class DataManager(object):
             cmdStatus, cmdOutput = commands.getstatusoutput(cmd)
             if (cmdStatus != 0):
                 raise Exception('copy file error')
-            return localFile
+            return tmp 
         except Exception as e:
             print e
             raise Exception('getPersistedFile error')

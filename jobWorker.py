@@ -68,52 +68,103 @@ class JobWorker(object):
             #self.strategyMergedData = self.getStrategyMergedData()
         except Exception as e:
             print 'preExecute error', e
+            raise e
 
 
     def execute(self, jobId):
-        pass
+        cmd = 'cd {0} && sh {1} < {2} > {3}'.format(self.jobDir, self.strategySrc, self.strategyAction, self.getJobResultFile(jobId))
+        print cmd
+        cmdStatus, cmdOutput = commands.getstatusoutput(cmd)
+        print cmdStatus, cmdOutput
+        if (cmdStatus != 0):
+            raise Exception('execute failed')
 
     def afterExecute(self, jobId):
+        try:
+            accuracyRate = self.getAccuracyRate()
+            precisionRate = self.getPrecisionRate()
+            recallRate = self.getRecallRate()
+            self.saveJobResult(accuracyRate, precisionRate, recallRate)
+            upRet = self.updateJobStatus(jobId, JOB_STATUS['DONE'])
+            if upRet == 1:
+                print 'Well Done!'
+        except Exception as e:
+            print 'afterExecute error', e
+            raise e
+
+   
+    def getPositiveSample(self, sampleFile):
         pass
 
+    def getNegativeSample(self, sampleFile):
+        pass
+
+    def getPositiveResult(self, resultFile):
+        pass
+
+    def getNegativeResult(self, resultFile):
+        pass
+
+    def saveJobResult(accuracyRate, precisionRate, recallRate):
+        print 'job result: accuracyRate: {0}, precisionRate: {1}, RecallRate: {2}'.format(accuracyRate, precisionRate, recallRate)
+        pass
+
+    def getAccuracyRate(self):
+        return 0.1
+
+    def getPrecisionRate(self):
+        return 0.2
+
+    def getRecallRate(self):
+        return 0.3
+
     def makeJobDir(self, jobId):
-        jobDir = TMP_DATA_PATH + str(jobId)
+        jobDir = TMP_DATA_PATH + str(jobId) + '/'
         if os.path.exists(jobDir):
             os.popen('rm -rf {0}'.format(jobDir))
         if not os.path.exists(jobDir):
             os.makedirs(jobDir)
         return jobDir
 
-    def moveData(self, srcData, destData):
-        cmd = 'mv {0} {1}'.format(srcData, destData)
+    def moveFromTmpToJobDir(self, srcData):
+        tmpData = TMP_DATA_PATH + srcData
+        cmd = 'mv {0} {1}'.format(tmpData, self.jobDir)
         print cmd
         cmdStatus, cmdOutput = commands.getstatusoutput(cmd)
         if (cmdStatus != 0):
-            raise Exception('moveData failed')
+            raise Exception('moveToJobDir failed')
+        return self.jobDir + srcData
+
+    def getJobResultFile(self, jobId):
+        return self.jobDir + 'result.txt'
 
     def getStragetySrc(self, strategyInfo):
+        cmd = 'cd {0} && cp -f testStrategy.sh {1}'.format(TMP_DATA_PATH, self.jobDir)
+        print cmd
+        os.popen('cd {0} && cp -f testStrategy.sh {1}'.format(TMP_DATA_PATH, self.jobDir))
+        return self.jobDir + 'testStrategy.sh'
         pass
 
     def getFeatureData(self, strategyInfo):
         dataManager = DataManager()
         data = dataManager.get('feature', strategyInfo['feature_version'])
+        data = self.moveFromTmpToJobDir(data)
         print data 
-        self.moveData(data, self.jobDir)
         return data 
 
 
     def getSampleData(self, strategyInfo):
         dataManager = DataManager()
         data = dataManager.get('sample', strategyInfo['sample_version'])
+        data = self.moveFromTmpToJobDir(data)
         print data 
-        self.moveData(data, self.jobDir)
         return data 
 
     def getActionData(self, strategyInfo):
         dataManager = DataManager()
         data = dataManager.get('action', strategyInfo['action_version'])
+        data = self.moveFromTmpToJobDir(data)
         print data 
-        self.moveData(data, self.jobDir)
         return data 
 
     def schedule(self):
