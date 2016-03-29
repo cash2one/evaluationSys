@@ -29,14 +29,21 @@ class JobWorker(object):
     strategySample = None 
     strategyAction = None 
 
+    positiveSampleCount = 0 
+    negativeSampleCount = 0 
+    posiviteResultCount = 0 
+    negativeResultCount = 0 
+    truePosiviteResultCount = 0 
+    trueNegativeResultCount = 0 
+
     def run(self):
         try:
             #1. 调度一个job
             self.jobInfo = self.schedule()
             if self.jobInfo:
-                print 'start schedule job:', self.jobInfo['id']
+                print '********* start schedule job:', self.jobInfo['id'] 
             else:
-                print 'no job can be dispatched'
+                print '*********** no job can be dispatched'
                 return
 
             self.preExecute(self.jobInfo['id'], self.jobInfo['strategy_version'])
@@ -44,6 +51,7 @@ class JobWorker(object):
             self.afterExecute(self.jobInfo['id'])
         except Exception as e:
             print e
+            self.updateJobStatus(jobId, JOB_STATUS['UNSCHEDULED'])
         else:
             pass
         finally:
@@ -51,12 +59,13 @@ class JobWorker(object):
 
     def preExecute(self, jobId, strategyVersion):
         try:
+            print '********** prepare for job'
             strategyManager = StrategyManager()
             strategyInfo = strategyManager.getVersionInfo(strategyVersion)
             if not strategyInfo:
-                print 'strategyVersion invalid:', strategyVersion
+                print '********** strategyVersion invalid:', strategyVersion
                 return
-        
+       
             self.jobDir = self.makeJobDir(jobId)
 
             self.strategySrc = self.getStragetySrc(strategyInfo)
@@ -72,19 +81,23 @@ class JobWorker(object):
 
 
     def execute(self, jobId):
-        cmd = 'cd {0} && sh {1} < {2} > {3}'.format(self.jobDir, self.strategySrc, self.strategyAction, self.getJobResultFile(jobId))
+        print '********* job executing'
+        cmd = 'cd {0} && php {1} {2} > {3}'.format(self.jobDir, self.strategySrc, self.strategyAction, self.getJobResultFile(jobId))
         print cmd
         cmdStatus, cmdOutput = commands.getstatusoutput(cmd)
         print cmdStatus, cmdOutput
         if (cmdStatus != 0):
             raise Exception('execute failed')
+        print '********* job executed'
 
     def afterExecute(self, jobId):
         try:
-            accuracyRate = self.getAccuracyRate()
-            precisionRate = self.getPrecisionRate()
-            recallRate = self.getRecallRate()
-            self.saveJobResult(accuracyRate, precisionRate, recallRate)
+            self.doCommonCompute(jobId)
+
+            accuracyRate = self.getAccuracyRate(jobId)
+            precisionRate = self.getPrecisionRate(jobId)
+            recallRate = self.getRecallRate(jobId)
+            self.saveJobResult(jobId, accuracyRate, precisionRate, recallRate)
             upRet = self.updateJobStatus(jobId, JOB_STATUS['DONE'])
             if upRet == 1:
                 print 'Well Done!'
@@ -92,33 +105,164 @@ class JobWorker(object):
             print 'afterExecute error', e
             raise e
 
-   
-    def getPositiveSample(self, sampleFile):
-        pass
+  
+    #得到正样本
+    def getPositiveSample(self, jobId):
+        sampleFile = self.strategySample
+        pSampleFile = self.getJobPositiveSampleFile(jobId)
+        cmd = "awk '{if($2 == 1){print $1}}'"
+        cmd = '{0} {1} > {2}'.format(cmd, sampleFile, pSampleFile)
+        print cmd
+        os.popen(cmd)
 
-    def getNegativeSample(self, sampleFile):
-        pass
+    #得到负样本
+    def getNegativeSample(self, jobId):
+        sampleFile = self.strategySample
+        nSampleFile = self.getJobNegativeSampleFile(jobId)
+        cmd = "awk '{if($2 == 0){print $1}}'"
+        cmd = '{0} {1} > {2}'.format(cmd, sampleFile, nSampleFile)
+        print cmd
+        os.popen(cmd)
 
-    def getPositiveResult(self, resultFile):
-        pass
+    #得到挖掘出的正结果(有购房意愿)
+    def getPositiveResult(self, jobId):
+        resultFile = self.getJobResultFile(jobId)
+        pResultFile = self.getJobPositiveResultFile(jobId)
+        cmd = "awk '{if($2 == 1){print $1}}'"
+        cmd = '{0} {1} > {2}'.format(cmd, resultFile, pResultFile)
+        print cmd
+        os.popen(cmd)
 
-    def getNegativeResult(self, resultFile):
-        pass
+    #得到挖掘出的负结果(没有买房意愿)
+    def getNegativeResult(self, jobId):
+        resultFile = self.getJobResultFile(jobId)
+        nResultFile = self.getJobNegativeResultFile(jobId)
+        cmd = "awk '{if($2 == 0){print $1}}'"
+        cmd = '{0} {1} > {2}'.format(cmd, resultFile, nResultFile)
+        print cmd
+        os.popen(cmd)
 
-    def saveJobResult(accuracyRate, precisionRate, recallRate):
-        print 'job result: accuracyRate: {0}, precisionRate: {1}, RecallRate: {2}'.format(accuracyRate, precisionRate, recallRate)
-        pass
+    #得到挖掘出的正结果(有购房意愿)数量
+    def getPositiveResultCount(self, jobId):
+        pResultFile = self.getJobPositiveResultFile(jobId)
+        cmd = "awk 'END{print NR}'"
+        cmd = '{0} {1}'.format(cmd, pResultFile)
+        cmdStatus, cmdOutput = commands.getstatusoutput(cmd)
+        if (cmdStatus != 0):
+            raise Exception('getPositiveResultCount failed')
+        return cmdOutput 
 
-    def getAccuracyRate(self):
-        return 0.1
+    #得到挖掘出的负结果(没有买房意愿)数量
+    def getNegativeResultCount(self, jobId):
+        nResultFile = self.getJobNegativeResultFile(jobId)
+        cmd = "awk 'END{print NR}'"
+        cmd = '{0} {1}'.format(cmd, nResultFile)
+        cmdStatus, cmdOutput = commands.getstatusoutput(cmd)
+        if (cmdStatus != 0):
+            raise Exception('getNegativeResultCount failed')
+        return cmdOutput 
 
-    def getPrecisionRate(self):
-        return 0.2
+    #得到正样本数量
+    def getPositiveSampleCount(self, jobId):
+        pSampleFile = self.getJobPositiveSampleFile(jobId)
+        cmd = "awk 'END{print NR}'"
+        cmd = '{0} {1}'.format(cmd, pSampleFile)
+        cmdStatus, cmdOutput = commands.getstatusoutput(cmd)
+        if (cmdStatus != 0):
+            raise Exception('getPositiveSampleCount failed')
+        return cmdOutput 
 
-    def getRecallRate(self):
-        return 0.3
+    #得到负样本数量
+    def getNegativeSampleCount(self, jobId):
+        nSampleFile = self.getJobNegativeSampleFile(jobId)
+        cmd = "awk 'END{print NR}'"
+        cmd = '{0} {1}'.format(cmd, nSampleFile)
+        cmdStatus, cmdOutput = commands.getstatusoutput(cmd)
+        if (cmdStatus != 0):
+            raise Exception('getNegativeSampleCount failed')
+        return cmdOutput 
+
+    #正确的识别为购房用户的cuid,即混淆矩阵中的TP
+    def getTruePositiveResult(self, jobId):
+        pSampleFile = self.getJobPositiveSampleFile(jobId)
+        pResultFile = self.getJobPositiveResultFile(jobId)
+        tpResultFile = self.getJobTruePositiveResultFile(jobId)
+        cmd = "sort {0} {1} | uniq -d > {2}".format(pSampleFile, pResultFile, tpResultFile)
+        print cmd
+        os.popen(cmd)
+
+    #正确的识别为非购房用户的cuid,即混淆矩阵中的TN
+    def getTrueNegativeResult(self, jobId):
+        nSampleFile = self.getJobNegativeSampleFile(jobId)
+        nResultFile = self.getJobNegativeResultFile(jobId)
+        tnResultFile = self.getJobTrueNegativeResultFile(jobId)
+        cmd = "sort {0} {1} | uniq -d > {2}".format(nSampleFile, nResultFile, tnResultFile)
+        print cmd
+        os.popen(cmd)
+
+    #得到正样本数量
+    def getTruePositiveResultCount(self, jobId):
+        tpResultFile = self.getJobTruePositiveResultFile(jobId)
+        cmd = "awk 'END{print NR}'"
+        cmd = '{0} {1}'.format(cmd, tpResultFile)
+        cmdStatus, cmdOutput = commands.getstatusoutput(cmd)
+        if (cmdStatus != 0):
+            raise Exception('getTruePositiveResultCount failed')
+        return cmdOutput 
+
+    #得到负样本数量
+    def getTrueNegativeResultCount(self, jobId):
+        tnResultFile = self.getJobTrueNegativeResultFile(jobId)
+        cmd = "awk 'END{print NR}'"
+        cmd = '{0} {1}'.format(cmd, tnResultFile)
+        cmdStatus, cmdOutput = commands.getstatusoutput(cmd)
+        if (cmdStatus != 0):
+            raise Exception('getTrueNegativeResultCount failed')
+        return cmdOutput 
+
+
+    def doCommonCompute(self, jobId):
+        self.getPositiveSample(jobId)
+        self.getNegativeSample(jobId)
+        self.getPositiveResult(jobId)
+        self.getNegativeResult(jobId)
+        self.getTruePositiveResult(jobId)
+        self.getTrueNegativeResult(jobId)
+
+        self.positiveSampleCount = int(self.getPositiveSampleCount(jobId))
+        self.negativeSampleCount = int(self.getNegativeSampleCount(jobId))
+        self.posiviteResultCount = int(self.getPositiveResultCount(jobId))
+        self.negativeResultCount = int(self.getNegativeResultCount(jobId))
+        self.truePosiviteResultCount = int(self.getTruePositiveResultCount(jobId))
+        self.trueNegativeResultCount = int(self.getTrueNegativeResultCount(jobId))
+        print '*'*100
+        print '*'*100
+        print '正样本数量positiveSampleCount={0}'.format(self.positiveSampleCount)
+        print '负样本数量negativeSampleCount={0}'.format(self.negativeSampleCount) 
+        print '挖掘出的意向用户数量posiviteResultCount={0}'.format(self.posiviteResultCount) 
+        print '挖掘出的非意向用户数量negativeResultCount={0}'.format(self.negativeResultCount) 
+        print '正确挖掘出的意向用户数量truePosiviteResultCount={0}'.format(self.truePosiviteResultCount) 
+        print '正确挖掘出的非意向用户数量trueNegativeResultCount={0}'.format(self.trueNegativeResultCount) 
+        print '*'*100
+        print '*'*100
+
+    def getAccuracyRate(self, jobId):
+        accuracyRate = float(self.truePosiviteResultCount + self.trueNegativeResultCount) / float(self.positiveSampleCount + self.negativeSampleCount)
+        print '准确率=', accuracyRate
+        return accuracyRate 
+
+    def getPrecisionRate(self, jobId):
+        precisionRate = float(self.truePosiviteResultCount) / float(self.posiviteResultCount)
+        print '精度=', precisionRate 
+        return precisionRate 
+
+    def getRecallRate(self, jobId):
+        recallRate = float(self.truePosiviteResultCount) / float(self.positiveSampleCount)
+        print '召回率=', recallRate
+        return recallRate 
 
     def makeJobDir(self, jobId):
+        print '********* create job dir'
         jobDir = TMP_DATA_PATH + str(jobId) + '/'
         if os.path.exists(jobDir):
             os.popen('rm -rf {0}'.format(jobDir))
@@ -138,14 +282,34 @@ class JobWorker(object):
     def getJobResultFile(self, jobId):
         return self.jobDir + 'result.txt'
 
+    def getJobPositiveResultFile(self, jobId):
+        return self.jobDir + 'pResult.txt'
+    
+    def getJobNegativeResultFile(self, jobId):
+        return self.jobDir + 'nResult.txt'
+    
+    def getJobPositiveSampleFile(self, jobId):
+        return self.jobDir + 'pSample.txt'
+
+    def getJobNegativeSampleFile(self, jobId):
+        return self.jobDir + 'nSample.txt'
+    
+    def getJobTrueNegativeResultFile(self, jobId):
+        return self.jobDir + 'tnResult.txt'
+    
+    def getJobTruePositiveResultFile(self, jobId):
+        return self.jobDir + 'tpResult.txt'
+
     def getStragetySrc(self, strategyInfo):
-        cmd = 'cd {0} && cp -f testStrategy.sh {1}'.format(TMP_DATA_PATH, self.jobDir)
+        print '********* get src file'
+        cmd = 'cd {0} && cp -f fangstrategy.php {1}'.format(TMP_DATA_PATH, self.jobDir)
         print cmd
-        os.popen('cd {0} && cp -f testStrategy.sh {1}'.format(TMP_DATA_PATH, self.jobDir))
-        return self.jobDir + 'testStrategy.sh'
+        os.popen(cmd)
+        return self.jobDir + 'fangstrategy.php'
         pass
 
     def getFeatureData(self, strategyInfo):
+        print '********* get feature file'
         dataManager = DataManager()
         data = dataManager.get('feature', strategyInfo['feature_version'])
         data = self.moveFromTmpToJobDir(data)
@@ -154,6 +318,7 @@ class JobWorker(object):
 
 
     def getSampleData(self, strategyInfo):
+        print '********* get sample file'
         dataManager = DataManager()
         data = dataManager.get('sample', strategyInfo['sample_version'])
         data = self.moveFromTmpToJobDir(data)
@@ -161,6 +326,7 @@ class JobWorker(object):
         return data 
 
     def getActionData(self, strategyInfo):
+        print '********* get action file'
         dataManager = DataManager()
         data = dataManager.get('action', strategyInfo['action_version'])
         data = self.moveFromTmpToJobDir(data)
@@ -222,6 +388,16 @@ class JobWorker(object):
             print e
             return False
 
+    def saveJobResult(self, jobId, accuracyRate, precisionRate, recallRate):
+        print 'job result: 准确率: {0}, 精度: {1}, 召回率: {2}'.format(accuracyRate, precisionRate, recallRate)
+        try:
+            sqlExecutor = SqlExecutor.getInstance()
+            sql = 'update jobpool set accuracy_rate={0}, precision_rate={1}, recall_rate={2} where id={3}'.format(int(accuracyRate * 10000) / 100.0, int(precisionRate * 10000) / 100.0, int(recallRate * 10000) / 100.0, int(jobId))
+            ret = sqlExecutor.update(sql)
+            return ret
+        except Exception as e:
+            print e
+            return False
 
 if __name__ == '__main__':
     try:
