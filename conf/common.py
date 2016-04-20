@@ -1,7 +1,13 @@
 # -*- coding: utf-8 -*-
 
-TMP_DATA_PATH = '/home/users/lihuipeng/work/fangchan/data-mining/pingjiaxitong/evaluation-sys/data/data-tmp/'
-WAREHOUSE_DATA_PATH = '/home/users/lihuipeng/work/fangchan/data-mining/pingjiaxitong/evaluation-sys/data/data-warehouse/'
+import os
+
+CUR_PATH = os.path.dirname(os.path.realpath(__file__))
+TMP_DATA_PATH = CUR_PATH + '/../data/data-tmp/'
+WAREHOUSE_DATA_PATH = CUR_PATH + '/../data/data-warehouse/'
+
+#TMP_DATA_PATH = '/home/users/lihuipeng/work/fangchan/data-mining/pingjiaxitong/evaluation-sys/data/data-tmp/'
+#WAREHOUSE_DATA_PATH = '/home/users/lihuipeng/work/fangchan/data-mining/pingjiaxitong/evaluation-sys/data/data-warehouse/'
 
 #数据类型
 FEATURE_TYPE = 1    #特征数据

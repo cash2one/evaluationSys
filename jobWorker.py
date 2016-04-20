@@ -329,9 +329,8 @@ class JobWorker(object):
         cmd = 'cd {0} && sh run.sh'.format(TMP_DATA_PATH + '/packUbcInfo')
         print cmd
         os.popen(cmd)
-        data = self.moveFromTmpToJobDir('/packUbcInfo/action.data')
-        print data
-        return data
+        data = self.moveFromTmpToJobDir('packUbcInfo/action.data')
+        return self.jobDir + 'action.data'
 
     def schedule(self):
         jobInfo = self.getUnscheduledJob()
