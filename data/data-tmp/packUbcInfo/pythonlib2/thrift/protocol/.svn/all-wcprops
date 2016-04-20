@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/inf/yun/!svn/ver/59100/trunk/lightapp/fang/fangdm/script/hbase-accessor/pythonlib/thrift/protocol
+END
+TBinaryProtocol.py
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/inf/yun/!svn/ver/59100/trunk/lightapp/fang/fangdm/script/hbase-accessor/pythonlib/thrift/protocol/TBinaryProtocol.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/inf/yun/!svn/ver/59100/trunk/lightapp/fang/fangdm/script/hbase-accessor/pythonlib/thrift/protocol/__init__.py
+END
+TProtocol.py
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/inf/yun/!svn/ver/59100/trunk/lightapp/fang/fangdm/script/hbase-accessor/pythonlib/thrift/protocol/TProtocol.py
+END

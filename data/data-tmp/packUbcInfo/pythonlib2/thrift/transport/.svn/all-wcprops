@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/inf/yun/!svn/ver/59100/trunk/lightapp/fang/fangdm/script/hbase-accessor/pythonlib/thrift/transport
+END
+TSocket.py
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/inf/yun/!svn/ver/59100/trunk/lightapp/fang/fangdm/script/hbase-accessor/pythonlib/thrift/transport/TSocket.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/inf/yun/!svn/ver/59100/trunk/lightapp/fang/fangdm/script/hbase-accessor/pythonlib/thrift/transport/__init__.py
+END
+TTransport.py
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/inf/yun/!svn/ver/59100/trunk/lightapp/fang/fangdm/script/hbase-accessor/pythonlib/thrift/transport/TTransport.py
+END
+THttpClient.py
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/inf/yun/!svn/ver/59100/trunk/lightapp/fang/fangdm/script/hbase-accessor/pythonlib/thrift/transport/THttpClient.py
+END
+TTwisted.py
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/inf/yun/!svn/ver/59100/trunk/lightapp/fang/fangdm/script/hbase-accessor/pythonlib/thrift/transport/TTwisted.py
+END

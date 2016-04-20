@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/inf/yun/!svn/ver/59100/trunk/lightapp/fang/fangdm/script/hbase-accessor/pythonlib/thrift/reflection/limited
+END
+ttypes.py
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/inf/yun/!svn/ver/59100/trunk/lightapp/fang/fangdm/script/hbase-accessor/pythonlib/thrift/reflection/limited/ttypes.py
+END
+constants.py
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/inf/yun/!svn/ver/59100/trunk/lightapp/fang/fangdm/script/hbase-accessor/pythonlib/thrift/reflection/limited/constants.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/inf/yun/!svn/ver/59100/trunk/lightapp/fang/fangdm/script/hbase-accessor/pythonlib/thrift/reflection/limited/__init__.py
+END

@@ -27,12 +27,13 @@ class StrategyManager(object):
         argp.add_argument('-vd', '-desc', '-version_desc', dest='version_desc')
         argp.add_argument('-gb', '-branch', '-git_branch', dest='git_branch')
         argp.add_argument('-gi', '-git_id', '-git_commit_id', dest='git_commit_id')
+        argp.add_argument('-svn', '-svn_version', dest='svn_version')
         argp.add_argument('-fv', '-feature', '-feature_verison', dest='feature_verison')
         argp.add_argument('-sv', '-sample', '-sample_verison', dest='sample_verison')
         argp.add_argument('-av', '-action', '-action_verison', dest='action_verison')
     
         args = argp.parse_args()
-        print args 
+        #print args 
         try:
             self.do(args)
         except Exception as e:
@@ -49,30 +50,31 @@ class StrategyManager(object):
                 versionDesc = args.version_desc if args.version_desc else ''
                 gitBranch = args.git_branch if args.git_branch else 'master'
                 gitCommitId = args.git_commit_id if args.git_commit_id else ''
+                svnVersion = args.svn_version if args.svn_version else ''
                 featureVersion = args.feature_verison if args.feature_verison else 0 
                 sampleVersion = args.sample_verison if args.sample_verison else 0 
                 actionVersion = args.action_verison if args.action_verison else 0 
                 
-                self.add(versionName, versionDesc, gitBranch, gitCommitId, featureVersion, sampleVersion, actionVersion)
+                self.add(versionName, versionDesc, gitBranch, gitCommitId, svnVersion, featureVersion, sampleVersion, actionVersion)
             elif args.method == 'list':
                 self.list()
         except Exception as e:
             print e
 
     #添加新版本
-    def add(self, versionName, versionDesc, gitBranch, gitCommitId, featureVersion, sampleVersion, actionVersion):
-        if not sampleVersion:
-            print 'sampleVersion is not set'
-            return
-        if not actionVersion:
-            print 'actionVersion is not set'
-            return
+    def add(self, versionName, versionDesc, gitBranch, gitCommitId, svnVersion, featureVersion, sampleVersion, actionVersion):
+        #if not sampleVersion:
+        #    print 'sampleVersion is not set'
+        #    return
+        #if not actionVersion:
+        #    print 'actionVersion is not set'
+        #    return
 
         versionCode = datetime.datetime.now().strftime('%Y%m%d%H%M')
         try:
             #add version info
-            self.addNewVersion(versionCode, versionName, versionDesc, gitBranch, gitCommitId, featureVersion, sampleVersion, actionVersion)
-            print 'add new version success! version code =', versionCode
+            self.addNewVersion(versionCode, versionName, versionDesc, gitBranch, gitCommitId, svnVersion, featureVersion, sampleVersion, actionVersion)
+            print 'add new strategy version success! version code =', versionCode
         except Exception as e:
             print e
 
@@ -93,11 +95,11 @@ class StrategyManager(object):
             raise Exception('list error')
 
     #添加新数据版本
-    def addNewVersion(self, versionCode, versionName, versionDesc, gitBranch, gitCommitId, featureVersion, sampleVersion, actionVersion):
+    def addNewVersion(self, versionCode, versionName, versionDesc, gitBranch, gitCommitId, svnVersion, featureVersion, sampleVersion, actionVersion):
         try:
             sqlExecutor = SqlExecutor.getInstance()
-            sql = 'insert into strategy_version(version_code, version_name, version_desc, git_branch, git_commit_id, feature_version, sample_version, action_version, ctime) values({version_code},\'{version_name}\',\'{version_desc}\', \'{git_branch}\', \'{git_commit_id}\', {feature_version}, {sample_version}, {action_version}, {ctime})'.format(version_code=versionCode, version_name=versionName, version_desc=versionDesc, git_branch=gitBranch, git_commit_id=gitCommitId, feature_version=featureVersion, sample_version=sampleVersion, action_version=actionVersion, ctime=int(time.time()))
-            print sql
+            sql = 'insert into strategy_version(version_code, version_name, version_desc, git_branch, git_commit_id, svn_version, feature_version, sample_version, action_version, ctime) values({version_code},\'{version_name}\',\'{version_desc}\', \'{git_branch}\', \'{git_commit_id}\', \'{svn_version}\', {feature_version}, {sample_version}, {action_version}, {ctime})'.format(version_code=versionCode, version_name=versionName, version_desc=versionDesc, git_branch=gitBranch, git_commit_id=gitCommitId, svn_version=svnVersion, feature_version=featureVersion, sample_version=sampleVersion, action_version=actionVersion, ctime=int(time.time()))
+            #print sql
             ret = sqlExecutor.insert(sql)
         except Exception as e:
             raise Exception('addNewVersion error')

@@ -1,0 +1,601 @@
+{
+    "sites_in":{
+        "xf.baidu.com": {
+            "title": "百度房产",
+            "pages": {
+                "": {
+                    "title": "主页",
+                    "weight": 2
+                },
+                "citycorpo/discount/appid,type=xhx": {
+                    "title": "小户型",
+                    "weight": 3
+                },
+                "citycorpo/discount/appid,type=dtp": {
+                    "title": "地铁旁",
+                    "weight": 3
+                },
+                "citycorpo/discount/appid,type=discount": {
+                    "title": "独家优惠",
+                    "weight": 3
+                },
+                "citycorpo/discount/appid,type=jzx": {
+                    "title": "精装修",
+                    "weight": 3
+                },
+                "buildings/show/appid": {
+                    "title": "楼盘页"
+                },
+                "buildings/details/appid": {
+                    "title": "户型",
+                    "weight": 3
+                },
+                "buildings/gallery/appid": {
+                    "title": "全部图集",
+                    "weight": 3
+                },
+                "buildings/surroundings/appid": {
+                    "title": "周边",
+                    "weight": 3
+                },
+                "http://servicespot.baidu.com/order/confirm/show": {
+                    "title": "优惠券",
+                    "weight": 3
+                },
+                "buildings/map/appid": {
+                    "title": "地图",
+                    "weight": 3
+                },
+                "order/booking?appid": {
+                    "title": "预约填写页",
+                    "weight": 3
+                }
+            }
+        }
+
+    },
+
+    "sites_out":{
+        "m.fang.com" : {
+                "title" : "搜房网",
+                "xf":"xf",
+                "esf":"esf",
+                "pages" : {
+                    "" : {
+                        "title":"首页",
+                        "weight":1
+                    },
+                    "xf" : {
+                        "title":"新房",
+                        "weight":3
+                    },
+                    "esf" : {
+                        "title":"二手房",
+                        "weight":1
+                    },
+                    "zf" : {
+                        "title":"租房",
+                        "weight":1
+                    },
+                    "jiaju" : {
+                        "title":"装修",
+                        "weight":1
+                    },
+                    "my/?c=myesf&a=saleStaup" : {
+                        "title":"我要卖房",
+                        "weight":1
+                    }
+                }
+            },
+
+            "m.focus.cn" : {
+                "title" : "搜狐焦点",
+                "xf":"loupan",
+                "esf":"esf,house",
+                "pages" : {
+                    "" : {
+                        "title":"首页",
+                        "weight":1
+                    },
+                    "loupan" : {
+                        "title":"新房",
+                        "weight":5
+                    },
+                    "esf,house" : {
+                        "title":"二手房",
+                        "weight":2
+                    },
+                    "home" : {
+                        "title":"家居",
+                        "weight":1
+                    },
+                    "sh/loupan/lpmap/" : {
+                        "title":"地图找房",
+                        "weight":3
+                    },
+                    "pafangtuan" : {
+                        "title":"看房团",
+                        "weight":5
+                    }
+                }
+            },
+
+            "house.sina.cn" : {
+                "title" : "新浪乐居",
+                "xf":"site=touch&ctl=house",
+                "esf":"esf,house",
+                "pages" : {
+                    "http://house.sina.cn/touch/index/" : {
+                        "title":"首页",
+                        "weight":1
+                    },
+                    "site=touch&ctl=house" : {
+                        "title":"新房",
+                        "weight":5
+                    },
+                    "esf,house" : {
+                        "title":"二手房",
+                        "weight":2
+                    },
+                    "touch/esf,house,i2/?ln=index_dh" : {
+                        "title":"租房",
+                        "weight":1
+                    },
+                    "http://house.sina.cn/?site=touch&ctl=lookhouse&act=city_line" : {
+                        "title":"看房团",
+                        "weight":5
+                    },
+                    "http://haiwai.house.sina.com.cn/touch/index?ln=index_dh" : {
+                        "title":"海外",
+                        "weight":1
+                    }
+                }
+            },
+
+            "house.qq.com" : {
+                "title" : "腾讯房产",
+                "xf":"m.db.house.qq.com/search",
+                "esf":"esf.db.house.qq.com",
+                "pages" : {
+                    "http://m.house.qq.com/" : {
+                        "title":"首页",
+                        "weight":1
+                    },
+                    "m.db.house.qq.com/search" : {
+                        "title":"新房",
+                        "weight":5
+                    },
+                    "esf.db.house.qq.com,search/sale" : {
+                        "title":"二手房",
+                        "weight":2
+                    },
+                    "esf.db.house.qq.com,search/lease" : {
+                        "title":"租房",
+                        "weight":1
+                    },
+                    "m.db.house.qq.com/search/ft_90/?ait=discount" : {
+                        "title":"打折优惠",
+                        "weight":3
+                    },
+                    "m.db.house.qq.com/search/st_16/?ait=opendate" : {
+                        "title":"最新开盘",
+                        "weight":2
+                    },
+                    "m.db.house.qq.com/kft/" : {
+                        "title":"看房团",
+                        "weight":5
+                    }
+                }
+            },
+
+            "house.163.com" : {
+                "title" : "网易房产",
+                "xf" : "http://m.house.163.com,xf/index.html?refresh=true",
+                "esf" : "http://m.esf.house.163.com,msearch/1-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0.html",
+
+                "pages" : {
+                    "http://m.house.163.com,xf/index.html?refresh=true" : {
+                        "title":"主页/新房",
+                        "weight":2
+                    },
+                    "http://m.esf.house.163.com,msearch/1-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0.html" : {
+                        "title":"二手房",
+                        "weight":1
+                    },
+                    "http://m.house.163.com,xf/ztc/list" : {
+                        "title":"直通车",
+                        "weight":3
+                    }
+                }
+            },
+
+            "m.anjuke.com" : {
+                "title" : "安居客房产",
+                "xf" : "xinfang",
+                "esf" : "sale",
+                "xiaoqu" : "community",
+                "pages" : {
+                    "" : {
+                        "title":"主页",
+                        "weight":1
+                    },
+                    "xinfang" : {
+                        "title":"新房",
+                        "weight":3
+                    },
+                    "sale" : {
+                        "title":"二手房",
+                        "weight":1
+                    },
+                    "rent" : {
+                        "title":"租房",
+                        "weight":1
+                    },
+
+                    "shangye" : {
+                        "title":"商铺写字楼",
+                        "weight":1
+                    },
+                    "maifang" : {
+                        "title":"卖房",
+                        "weight":1
+                    },
+                    "mapproperty/sale" : {
+                        "title":"地图找房",
+                        "weight":3
+                    }
+
+                }
+            },
+
+            "house.ifeng.com" : {
+                "title" : "凤凰房产",
+                "xf" : "http://house.ifeng.com/sale/search/3066/_/_/0_0_0_0_0_0_0_0_0_0_0_0_0_0.shtml",
+                "pages" : {
+                    "" : {
+                        "title":"主页",
+                        "weight":1
+                    },
+                    "http://house.ifeng.com/sale/search/3066/_/_/0_0_0_0_0_0_0_0_0_0_0_0_0_0.shtml" : {
+                        "title":"新房",
+                        "weight":3
+                    },
+                    "dianshang" : {
+                        "title":"优惠",
+                        "weight":3
+                    },
+
+                    "dianshang#h1" : {
+                        "title":"限时优惠",
+                        "weight":3
+                    },
+                    "dianshang#h2" : {
+                        "title":"看房团",
+                        "weight":3
+                    },
+                    "dianshang#h3" : {
+                        "title":"房产头条",
+                        "weight":3
+                    },
+                    "dianshang#h4" : {
+                        "title":"电商优惠",
+                        "weight":3
+                    }
+                }
+            },
+
+            "m.5i5j.com" : {
+                "title" : "我爱我家",
+                "esf":"exchange",
+                "pages" : {
+                    "" : {
+                        "title":"主页",
+                        "weight":1
+                    },
+                    "exchange" : {
+                        "title":"二手房",
+                        "weight":1
+                    },
+                    "rent" : {
+                        "title":"租房",
+                        "weight":1
+                    },
+
+                    "broker" : {
+                        "title":"经纪人",
+                        "weight":1
+                    },
+                    "community" : {
+                        "title":"小区",
+                        "weight":1
+                    }
+                }
+            },
+
+            "m.lianjia.com/" : {
+                "title" : "链家在线",
+                "xf":"loupan",
+                "esf":"ershoufang",
+                "pages" : {
+                    "" : {
+                        "title":"主页",
+                        "weight":1
+                    },
+                    "ershoufang" : {
+                        "title":"二手房",
+                        "weight":1
+                    },
+                    "loupan" : {
+                        "title":"新房",
+                        "weight":3
+                    },
+
+                    "yezhu" : {
+                        "title":"卖房",
+                        "weight":1
+                    },
+                    "jingjiren" : {
+                        "title":"经纪人",
+                        "weight":1
+                    },
+                    "xuequfang" : {
+                        "title":"优质学区",
+                        "weight":1
+                    }
+                }
+            },
+
+            "http://m.taofw.cn" : {
+                "title" : "淘房屋",
+                "xf":"loupan",
+                "esf":"esf",
+                "pages" : {
+                    "" : {
+                        "title":"主页",
+                        "weight":1
+                    },
+                    "loupan/" : {
+                        "title":"新房",
+                        "weight":3
+                    },
+                    "youhui" : {
+                        "title":"优惠楼盘",
+                        "weight":2
+                    },
+
+                    "loupan/fujin" : {
+                        "title":"附近楼盘",
+                        "weight":1
+                    },
+                    "esf" : {
+                        "title":"二手房",
+                        "weight":1
+                    },
+                    "zu" : {
+                        "title":"租房",
+                        "weight":1
+                    }
+                }
+            },
+
+            "m.house365.com" : {
+                "title" : "365房产房",
+                "xf":"newhouse",
+                "esf":"secondhouse",
+                "pages" : {
+                    "" : {
+                        "title":"主页",
+                        "weight":1
+                    },
+                    "newhouse" : {
+                        "title":"新房",
+                        "weight":3
+                    },
+                    "secondhouse" : {
+                        "title":"二手房",
+                        "weight":2
+                    },
+
+                    "renthouse" : {
+                        "title":"租房",
+                        "weight":1
+                    },
+                    "decoration" : {
+                        "title":"装修",
+                        "weight":1
+                    }
+                }
+            },
+
+            "taofang.com" : {
+                "title" : "淘房网",
+                "xf":"xinfang",
+                "esf":"ershoufang",
+                "pages" : {
+                    "" : {
+                        "title":"主页",
+                        "weight":1
+                    },
+                    "xinfang" : {
+                        "title":"新房",
+                        "weight":3
+                    },
+                    "ershoufang" : {
+                        "title":"二手房",
+                        "weight":1
+                    },
+
+                    "zufang" : {
+                        "title":"租房",
+                        "weight":1
+                    },
+                    "xiaoqu" : {
+                        "title":"小区",
+                        "weight":1
+                    },
+                    "broker" : {
+                        "title":"经纪人",
+                        "weight":1
+                    }
+                }
+            },
+
+            "centanet.com/" : {
+                "title" : "中原地产",
+                "xf":"xinfang",
+                "esf":"ershoufang",
+                "pages" : {
+
+                }
+            },
+
+            "m.leju.com" : {
+                "title" : "易居购房网",
+                "xf":"touch/house",
+                "esf":"/esf/",
+                "pages" : {
+                    "" : {
+                        "title":"主页",
+                        "weight":1
+                    },
+                    "site=touch&ctl=house" : {
+                        "title":"新房",
+                        "weight":3
+                    },
+                    "/touch/house" : {
+                        "title":"新房-楼盘",
+                        "weight":3
+                    },
+                    "touch/esf":{
+                        "title":"二手房",
+                        "weight":1
+                    }
+
+                }
+            },
+
+            "m.fangtan007.com" : {
+                "title" : "房探网",
+                "esf":"/es/",
+                "pages" : {
+
+                }
+            },
+
+            "m.jiwu.com" : {
+                "title" : "吉屋网",
+                "xf":"/loupan/",
+                "esf":"/esf",
+                "pages" : {
+                    "loupan" : {
+                        "title":"新房列表",
+                        "weight":3
+                    },
+                    "/loupan/,.html" : {
+                        "title":"楼盘明细",
+                        "weight":3
+                    }
+
+                }
+            },
+
+            "m.iwjw.com" : {
+                "title" : "爱屋及乌网",
+                "esf":"sale",
+                "pages" : {
+
+                }
+            },
+
+            "m.58.com" : {
+                "title" : "58同城房产网",
+                "xf":"/xinfang",
+                "esf":"ershoufang",
+                "pages" : {
+                    "house" : {
+                        "title":"房产",
+                        "weight":1
+                    }
+                }
+            },
+
+            "ganji.com" : {
+                "title" : "赶集网",
+                "xf":"_fang12",
+                "pages" : {
+                    "housing" : {
+                        "title":"房产",
+                        "weight":1
+                    },
+                    "_fang12" : {
+                        "title":"新房出售",
+                        "weight":3
+                    }
+                }
+            },
+
+            ".zufang.com" : {
+                "title" : "租房网",
+                "pages" : {
+                    "" : {
+                        "title":"主页",
+                        "weight":1
+                    }
+                }
+            },
+
+            "house.people.com.cn" : {
+                "title" : "人民网-房产",
+                "pages" : {
+                    "" : {
+                        "title":"主页",
+                        "weight":1
+                    },
+                    "GB/164293" : {
+                        "title":"看盘小分队",
+                        "weight":1
+                    },
+                    "GB/164306" : {
+                        "title":"品牌房企",
+                        "weight":1
+                    }
+                }
+            },
+
+            "fangdi.com.cn" : {
+                "title" : "网上房地产",
+                "xf":"NewSale",
+                "esf":"finalndhouse",
+                "detail":"DistrictDetail.asp",
+                "pages" : {
+                    "" : {
+                        "title":"主页",
+                        "weight":1
+                    },
+                    "NewSale" : {
+                        "title":"新房",
+                        "weight":1
+                    },
+                    "finalndhouse" : {
+                        "title":"二手房",
+                        "weight":1
+                    },
+                    "DistrictDetail.asp" : {
+                        "title":"楼盘详情",
+                        "weight":1
+                    }
+                }
+            }
+    },
+
+    "house_keys":[
+        "xf","esf","zf","loupan","house","home",
+        "m.db.house.qq.com/search","esf.db.house.qq.com",
+        "xinfang","exchange","ershoufang","secondhouse","newhouse","fang"
+    ],
+
+    "menhus":[
+        "ganji.com","m.58.com"
+    ]
+
+}

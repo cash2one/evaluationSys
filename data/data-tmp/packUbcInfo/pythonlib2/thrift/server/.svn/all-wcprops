@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/inf/yun/!svn/ver/59100/trunk/lightapp/fang/fangdm/script/hbase-accessor/pythonlib/thrift/server
+END
+THttpServer.py
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/inf/yun/!svn/ver/59100/trunk/lightapp/fang/fangdm/script/hbase-accessor/pythonlib/thrift/server/THttpServer.py
+END
+TServer.py
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/inf/yun/!svn/ver/59100/trunk/lightapp/fang/fangdm/script/hbase-accessor/pythonlib/thrift/server/TServer.py
+END
+TNonblockingServer.py
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/inf/yun/!svn/ver/59100/trunk/lightapp/fang/fangdm/script/hbase-accessor/pythonlib/thrift/server/TNonblockingServer.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/inf/yun/!svn/ver/59100/trunk/lightapp/fang/fangdm/script/hbase-accessor/pythonlib/thrift/server/__init__.py
+END

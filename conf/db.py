@@ -9,3 +9,8 @@ MYSQL = {
 #    'autocommit': True,
 }
 
+MONGO = {
+    'host':'10.99.23.37',
+    'port': 8500,
+    'db': 'data-mining',
+}

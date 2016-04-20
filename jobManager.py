@@ -61,7 +61,7 @@ class JobManager(object):
             #check if strategyVersion exists
             strategyManager = StrategyManager()
             strategyVersionInfo = strategyManager.getVersionInfo(strategyVersion)
-            print strategyVersionInfo
+            #print strategyVersionInfo
             if strategyVersionInfo:
                 #add new job 
                 jobId = self.addNewJob(strategyVersion)
