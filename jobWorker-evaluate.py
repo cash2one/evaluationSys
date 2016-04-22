@@ -302,11 +302,10 @@ class JobWorker(object):
 
     def getStragetySrc(self, strategyInfo):
         print '********* get src file'
-        cmd = 'cd {0} && cp -f fangstrategy.php {1}'.format(TMP_DATA_PATH, self.jobDir)
+        cmd = 'cd {0} && svn co https://svn.baidu.com/inf/yun/trunk/lightapp/fang/fangdm/script/strategy -r {1}'.format(self.jobDir, strategyInfo['svn_version'])
         print cmd
         os.popen(cmd)
-        return self.jobDir + 'fangstrategy.php'
-        pass
+        return self.jobDir + 'strategy/fangstrategy.py'
 
     def getFeatureData(self, strategyInfo):
         print '********* get feature file'

@@ -8,11 +8,9 @@ import sys
 import time
 import datetime
 import commands
-import json
 
 from conf.common import *
 from dao.sqlexecutor import SqlExecutor
-from dao.mongoexecutor import MongoExecutor
 from strategyManager import StrategyManager
 from dataManager import DataManager
 
@@ -70,8 +68,13 @@ class JobWorker(object):
        
             self.jobDir = self.makeJobDir(jobId)
 
-            self.strategySrc = self.getStrategySrc(strategyInfo)
+            self.strategySrc = self.getStragetySrc(strategyInfo)
+            #self.strategyFeature = self.getFeatureData(strategyInfo)
+            self.strategySample = self.getSampleData(strategyInfo)
             self.strategyAction = self.getActionData(strategyInfo)
+
+
+            #self.strategyMergedData = self.getStrategyMergedData()
         except Exception as e:
             print 'preExecute error', e
             raise e
@@ -79,7 +82,7 @@ class JobWorker(object):
 
     def execute(self, jobId):
         print '********* job executing'
-        cmd = 'cd {0} && python {1} {2} > {3}'.format(self.jobDir, self.strategySrc, self.strategyAction, self.getJobResultFile(jobId))
+        cmd = 'cd {0} && php {1} {2} > {3}'.format(self.jobDir, self.strategySrc, self.strategyAction, self.getJobResultFile(jobId))
         print cmd
         cmdStatus, cmdOutput = commands.getstatusoutput(cmd)
         print cmdStatus, cmdOutput
@@ -89,35 +92,19 @@ class JobWorker(object):
 
     def afterExecute(self, jobId):
         try:
-            self.saveResultData(jobId)
-            self.deleteJobDir(jobId)
+            self.doCommonCompute(jobId)
+
+            accuracyRate = self.getAccuracyRate(jobId)
+            precisionRate = self.getPrecisionRate(jobId)
+            recallRate = self.getRecallRate(jobId)
+            self.saveJobResult(jobId, accuracyRate, precisionRate, recallRate)
+            upRet = self.updateJobStatus(jobId, JOB_STATUS['DONE'])
+            if upRet == 1:
+                print 'Well Done!'
         except Exception as e:
             print 'afterExecute error', e
             raise e
 
-    def deleteJobDir(self, jobId):
-        cmd = 'rm -rf {0}'.format(self.jobDir)
-        print cmd
-        cmdStatus, cmdOutput = commands.getstatusoutput(cmd)
-        print cmdStatus, cmdOutput
-        if (cmdStatus != 0):
-            raise Exception('deleteJobDir failed')
-
-    def saveResultData(self, jobId):
-        resultFile = self.getJobResultFile(jobId)
-        mongoExecutor = MongoExecutor.getInstance()
-        #print mongoExecutor.test()
-        f = open(resultFile, 'r')
-        intentionCustomer = f.readline()
-        while intentionCustomer:
-            intentionCustomerJson = json.loads(intentionCustomer)
-            intentionCustomerJson['createtime'] = int(time.time())
-            #ret = mongoExecutor.insert(intentionCustomerJson)
-            ret = mongoExecutor.replace_one({'cuid':intentionCustomerJson['cuid']}, intentionCustomerJson, True)
-            if not ret:
-                print 'saveResultData error'
-            intentionCustomer = f.readline()
-        f.close()
   
     #得到正样本
     def getPositiveSample(self, jobId):
@@ -313,12 +300,13 @@ class JobWorker(object):
     def getJobTruePositiveResultFile(self, jobId):
         return self.jobDir + 'tpResult.txt'
 
-    def getStrategySrc(self, strategyInfo):
+    def getStragetySrc(self, strategyInfo):
         print '********* get src file'
-        cmd = 'cd {0} && svn co https://svn.baidu.com/inf/yun/trunk/lightapp/fang/fangdm/script/strategy -r {1}'.format(self.jobDir, strategyInfo['svn_version'])
+        cmd = 'cd {0} && cp -f fangstrategy.php {1}'.format(TMP_DATA_PATH, self.jobDir)
         print cmd
         os.popen(cmd)
-        return self.jobDir + 'strategy/fangstrategy.py'
+        return self.jobDir + 'fangstrategy.php'
+        pass
 
     def getFeatureData(self, strategyInfo):
         print '********* get feature file'
@@ -339,11 +327,11 @@ class JobWorker(object):
 
     def getActionData(self, strategyInfo):
         print '********* get action file'
-        cmd = 'cd {0} && sh run.sh'.format(TMP_DATA_PATH + '/packUbcInfo')
-        print cmd
-        os.popen(cmd)
-        data = self.moveFromTmpToJobDir('packUbcInfo/action.data')
-        return self.jobDir + 'action.data'
+        dataManager = DataManager()
+        data = dataManager.get('action', strategyInfo['action_version'])
+        data = self.moveFromTmpToJobDir(data)
+        print data 
+        return data 
 
     def schedule(self):
         jobInfo = self.getUnscheduledJob()
@@ -414,7 +402,6 @@ class JobWorker(object):
 if __name__ == '__main__':
     try:
         jobWorker = JobWorker()
-        #jobWorker.saveResultData(1)
         jobWorker.run()
     except:
         sys.exit('Error encountered.')
