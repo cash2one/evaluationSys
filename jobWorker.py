@@ -8,6 +8,7 @@ import sys
 import time
 import datetime
 import commands
+import json
 
 from conf.common import *
 from dao.sqlexecutor import SqlExecutor
@@ -89,21 +90,33 @@ class JobWorker(object):
     def afterExecute(self, jobId):
         try:
             self.saveResultData(jobId)
+            self.deleteJobDir(jobId)
         except Exception as e:
             print 'afterExecute error', e
             raise e
+
+    def deleteJobDir(self, jobId):
+        cmd = 'rm -rf {0}'.format(self.jobDir)
+        print cmd
+        cmdStatus, cmdOutput = commands.getstatusoutput(cmd)
+        print cmdStatus, cmdOutput
+        if (cmdStatus != 0):
+            raise Exception('deleteJobDir failed')
 
     def saveResultData(self, jobId):
         resultFile = self.getJobResultFile(jobId)
         mongoExecutor = MongoExecutor.getInstance()
         #print mongoExecutor.test()
         f = open(resultFile, 'r')
-        line = f.readline()
-        while line:
-            ret = mongoExecutor.insert(line)
+        intentionCustomer = f.readline()
+        while intentionCustomer:
+            intentionCustomerJson = json.loads(intentionCustomer)
+            intentionCustomerJson['createtime'] = int(time.time())
+            #ret = mongoExecutor.insert(intentionCustomerJson)
+            ret = mongoExecutor.replace_one({'cuid':intentionCustomerJson['cuid']}, intentionCustomerJson, True)
             if not ret:
                 print 'saveResultData error'
-            line = f.readline()
+            intentionCustomer = f.readline()
         f.close()
   
     #得到正样本

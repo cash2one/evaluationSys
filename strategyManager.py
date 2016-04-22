@@ -85,11 +85,11 @@ class StrategyManager(object):
             pageSize = ps
             ret = self.getVersionList(offset, pageSize)
             print '*' * 200
-            print '{0:15s}{1:30s}{2:15s}{3:30s}{4:20s}{5:20s}{6:20s}{7:15s}'.format('version_code', 'version_name', 'git_branch', 'git_commit_id', 'feature_version', 'sample_version', 'action_version', 'create_time')
+            print '{0:15s}{1:30s}{2:15s}{3:30s}{4:20s}{5:20s}{6:20s}{7:20s}{8:15s}'.format('version_code', 'version_name', 'git_branch', 'git_commit_id', 'svn_version', 'feature_version', 'sample_version', 'action_version', 'create_time')
             print '*' * 200
             for versionRecord in ret:
                 strTime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(versionRecord['ctime']))
-                print '{0:15s}{1:30s}{2:15s}{3:30s}{4:20s}{5:20s}{6:20s}{7:15s}'.format(str(versionRecord['version_code']), versionRecord['version_name'], versionRecord['git_branch'], versionRecord['git_commit_id'], str(versionRecord['feature_version']), str(versionRecord['sample_version']), str(versionRecord['action_version']), strTime)
+                print '{0:15s}{1:30s}{2:15s}{3:30s}{4:20s}{5:20s}{6:20s}{7:20s}{8:15s}'.format(str(versionRecord['version_code']), versionRecord['version_name'], versionRecord['git_branch'], versionRecord['git_commit_id'], versionRecord['svn_version'], str(versionRecord['feature_version']), str(versionRecord['sample_version']), str(versionRecord['action_version']), strTime)
             print '*' * 200
         except Exception as e:
             raise Exception('list error')

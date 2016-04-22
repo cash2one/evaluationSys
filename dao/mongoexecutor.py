@@ -25,7 +25,8 @@ class MongoExecutor(object):
     instance = None
     mutex = threading.Lock()
     def __init__(self, dbCfg):
-        self.conn = pymongo.Connection(dbCfg['host'], dbCfg['port'])
+        #self.conn = pymongo.Connection(dbCfg['host'], dbCfg['port'])
+        self.conn = pymongo.MongoClient(dbCfg['host'], dbCfg['port'])
         self.db = self.conn[dbCfg['db']]
         self.collection = self.db['intentionCustomer']
 
@@ -44,11 +45,18 @@ class MongoExecutor(object):
     def test(self):
         return self.collection.find_one()
     
-    def insert(self, record):
+    def insert(self, recordJson):
         try:
-            self.collection.insert(json.loads(record))
+            self.collection.insert(recordJson)
             return True
         except Exception as e:
             print e
         return False
 
+    def replace_one(self, filter, replacement, upsert=False):
+        try:
+            self.collection.replace_one(filter, replacement, upsert)
+            return True
+        except Exception as e:
+            print e
+        return False

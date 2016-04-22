@@ -78,12 +78,12 @@ class JobManager(object):
             size = int(ps)
             ret = self.getJobList(offset, size)
             print '*' * 200
-            print '{0:20s}{1:30s}{2:30s}{3:30s}{4:30s}{5:30s}{6:30s}'.format('strategy_version', 'create_time', 'update_time', 'job_status', 'accuracy_rate', 'precision_rate', 'recall_rate')
+            print '{0:20s}{1:30s}{2:30s}{3:30s}{4:30s}{5:30s}{6:30s}{7:30s}'.format('job_id', 'strategy_version', 'create_time', 'update_time', 'job_status', 'accuracy_rate', 'precision_rate', 'recall_rate')
             print '*' * 200
             for jobRecord in ret:
                 strcTime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(jobRecord['ctime']))
                 strmTime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(jobRecord['mtime']))
-                print '{0:20s}{1:30s}{2:30s}{3:30s}{4:30s}{5:30s}{6:30s}'.format(str(jobRecord['strategy_version']), strcTime, strmTime, str(jobRecord['job_status']), str(jobRecord['accuracy_rate']), str(jobRecord['precision_rate']), str(jobRecord['recall_rate']))
+                print '{0:20s}{1:30s}{2:30s}{3:30s}{4:30s}{5:30s}{6:30s}{7:30s}'.format(str(jobRecord['id']), str(jobRecord['strategy_version']), strcTime, strmTime, str(jobRecord['job_status']), str(jobRecord['accuracy_rate']), str(jobRecord['precision_rate']), str(jobRecord['recall_rate']))
             print '*' * 200
         except Exception as e:
             raise Exception('list error')
